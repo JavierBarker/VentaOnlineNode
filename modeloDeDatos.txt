@@ -1,12 +1,14 @@
 Productos
 -nombre
--cantidad
+-stock
 -precio
 -categoria (referenses categorias)
+-cantidad Comprada
 
 
 categoria
 -nombre
+-descripcion
 
 Usuarios
 -nombre
