@@ -1,5 +1,4 @@
 'use strict'
-const { model } = require("mongoose");
 const Categoria = require("../models/categoria.model");
 
 function agregarCategoria(req, res) {
@@ -31,7 +30,21 @@ function agregarCategoria(req, res) {
     }
 }
 
-//me quede en agregar categoria
+function obtenerCategorias(req, res){
+    if (req.user.rol === "ROL_ADMIN") {
+        Categoria.find((err, categoriasEncontradas) =>{
+            if (err) return res.status(500).send({mensaje: 'Error en la peticion de la Categoria'});
+            if (!categoriasEncontradas) return res.status(500).send({mensaje: 'Error al Buscar Categorias'});
+            return res.status(200).send({categoriasEncontradas});
+        })
+    }else{
+        return req.status(500).send({mensaje: 'No tiene los Permisos Necesarios'});
+    }
+
+}
+
+
 module.exports = {
-    agregarCategoria
+    agregarCategoria,
+    obtenerCategorias
 }

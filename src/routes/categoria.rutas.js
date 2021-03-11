@@ -7,4 +7,5 @@ var api = express.Router();
 
 api.post('/agregarCategoria', md_autenticador.ensureAuth, categoriaControlador.agregarCategoria);
 
+api.get('/obtenerCategorias', md_autenticador.ensureAuth, categoriaControlador.obtenerCategorias);
 module.exports = api;

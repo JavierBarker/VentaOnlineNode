@@ -8,6 +8,7 @@ const adminControlador = require("./src/controllers/admin.controller");
 //Importamos las Rutas
 const global_rutas = require("./src/routes/global.rutas");
 const categoria_rutas = require("./src/routes/categoria.rutas");
+const producto_rutas = require("./src/routes/producto.rutas");
 
 //Crea ADMIN
 adminControlador.registrarAdmin();
@@ -20,7 +21,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //Cargamos las rutas
-app.use('/api', global_rutas, categoria_rutas);
+app.use('/api', global_rutas, categoria_rutas, producto_rutas);
 
 
 //Exportamos todo
