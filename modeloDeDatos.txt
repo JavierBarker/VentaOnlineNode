@@ -5,23 +5,39 @@ Productos
 -categoria (referenses categorias)
 -cantidad Comprada
 
+----------------------------------------------------------------------------
 
 categoria
 -nombre
 -descripcion
-
+--------------------------------------------------------------------------
 Usuarios
 -nombre
 -usuario
 -password
 -Rol
 -carritoDeCompras{
-
+	-productos:[{
+		-nombre
+		-cantidad
+		-precio
+		-subtotal
+		-idProducto
+	}]
+	-total
 }
+------------------------------------------------------------------------------
 
--facturas{
-
-}
+facturas
+-productos:[{
+	-nombre
+	-cantidad
+	-precio
+	-subtotal
+  	-idProducto
+}]
+-totalAPagar
+------------------------------------------------------------------------------
 
 Admin
 -Usuario
@@ -30,3 +46,23 @@ Admin
 -Rol
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+WTF
