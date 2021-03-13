@@ -115,11 +115,29 @@ function eliminarProducto(req, res) {
         return res.status(500).send({mensaje: 'No tiene los Permisos Necesarios'});
     }
 }
+
+
+
+
+
+// Poder visualizar los productos agotados.
+function visualizarProductosAgotados(req, res) {
+    if (req.user.rol === "ROL_ADMIN") {
+        Producto.find({stock: 0}, (err, productosEncontrados)=>{
+            if (err) return res.status(500).send({mensaje: 'Error en la peticion Producto'});
+            if (!productosEncontrados) return res.status(500).send({mensaje: 'Error al Buscar Los Productos'});
+            return res.status(200).send({mensaje: 'Producto Agotados',productosEncontrados});
+        })
+    }else{
+        return res.status(500).send({mensaje: 'No tiene los Permisos Necesarios'});
+    }
+}
 module.exports = {
     agregarProducto,
     obtenerProductoById,
     obtenerProductos,
     editarProducto,
     controlDeStock,
-    eliminarProducto
+    eliminarProducto,
+    visualizarProductosAgotados
 }
