@@ -287,33 +287,30 @@ function agregarAlCarrito(req, res) {
             if (err) return res.status(500).send({mensaje: 'Error en la peticion del Producto'});
             if (!productoEncontrado) return res.status(500).send({mensaje: 'Error al Buscar Producto'});
             
-            Usuario.findOne({_id: idCliente, "carritoDeCompras.productos.idProducto": idProducto}, {"carritoDeCompras.productos.$": 1},(err, productoEncontradoArray)=>{
+            Usuario.findOne({_id: idCliente, "carritoDeCompras.productos.idProducto": idProducto}, {"carritoDeCompras.$": 1},(err, productoEncontradoArray)=>{
                 if (err) return res.status(500).send({ mensaje: 'Error en la peticion de Usuarios', err});
+                //return res.status(200).send({productoEncontradoArray});
                 //if (!productoEncontradoArray) return res.status(500).send({ mensaje: 'Error al obtener Usuario', productoEncontradoArray});
-                if (!productoEncontradoArray) {
-                    var subTotalAgregar = parseInt(productoEncontradoArray.subTotal + productoEncontrado.precio);
-
+                
+                if (productoEncontradoArray === null) {
                     Usuario.findByIdAndUpdate(idCliente, {$push: {"carritoDeCompras.productos": {
                         nombre: productoEncontrado.nombre,
-                        cantidad: productoEncontrado.cantidad,
+                        cantidad: 1,
                         precio: productoEncontrado.precio,
-                        subTotal: subTotalAgregar,
+                        subTotal: productoEncontrado.precio,
                         idProducto: productoEncontrado._id
-                    }}}, {new: true, useFindAndModify: false}, (err, carritoAgregado)=>{
+                    }}, $inc:{"carritoDeCompras.total": productoEncontrado.precio}}, {new: true, useFindAndModify: false}, (err, carritoAgregado)=>{
                         if (err) return res.status(500).send({ mensaje: 'Error en la peticion del Usuario', err});
                         if (!carritoAgregado) return res.status(500).send({ mensaje: 'Error al Agregar Carrito'});
                         return res.status(200).send({carritoAgregado});
                     })
-                }else{
-                    
-                    
-
-                    Usuario.findOneAndUpdate({_id: idCliente, "carritoDeCompras.productos.idProducto": idProducto}, {"carritoDeCompras.$.productos.$.subTotal": subTotalAgregar},
+                }else{    
+                    Usuario.findOneAndUpdate({_id: idCliente, "carritoDeCompras.productos.idProducto": idProducto}, {$inc :{"carritoDeCompras.productos.$.subTotal": productoEncontrado.precio, "carritoDeCompras.productos.$.cantidad": 1, "carritoDeCompras.total": productoEncontrado.precio}},
                     {new: true, useFindAndModify: false},(err, carritoAgregado)=>{
                         if (err) return res.status(500).send({ mensaje: 'Error en la peticion del Usuario', err});
-                        if (!carritoAgregado) return res.status(500).send({ mensaje: 'Error al Agregar Carrito'});
+                        //if (!carritoAgregado) return res.status(500).send({ mensaje: 'Error al Agregar Carrito'});
                         return res.status(500).send({carritoAgregado});
-                    })   
+                    })
                 }
             })
         })
